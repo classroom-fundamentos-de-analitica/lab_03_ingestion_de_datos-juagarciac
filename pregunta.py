@@ -13,9 +13,10 @@ import pandas as pd
 
 
 def ingest_data():
-
     #
     # Inserte su código aquí
     #
 
+    print("Ingesting data...")
+    df = ["perra",]
     return df
