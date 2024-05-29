@@ -26,7 +26,8 @@ def ingest_data():
         match = re.match(r'^\s*(\d+)\s+(\d+)\s+([\d,]+)\s+%', clean_line)
         if match:
             if current_cluster:
-                current_cluster['principales_palabras_clave'] = current_cluster['principales_palabras_clave']+" ".join(keywords)
+                current_cluster['principales_palabras_clave'] =current_cluster['principales_palabras_clave']+" "+" ".join(keywords)
+                current_cluster['principales_palabras_clave'] = current_cluster['principales_palabras_clave'].replace(".", "")
                 data.append(current_cluster)
                 keywords = []
             palabra = clean_line.split()
@@ -40,17 +41,16 @@ def ingest_data():
                 }
         
         elif clean_line:
-            if("Cluster  Cantidad de" in clean_line or "Palabras clave" in clean_line):
+            if("Cluster  Cantidad de" in clean_line or "palabras clave" in clean_line):
                 continue
-            keywords.extend([word.strip() for word in clean_line.split(',')])
+            keywords.extend([word.strip() for word in clean_line.split()])
 
     if current_cluster:
-        current_cluster['principales_palabras_clave'] = current_cluster['principales_palabras_clave']+" ".join(keywords)
+        current_cluster['principales_palabras_clave'] = current_cluster['principales_palabras_clave']+" "+" ".join(keywords)
+        current_cluster['principales_palabras_clave'] = current_cluster['principales_palabras_clave'].replace(".", "")
         data.append(current_cluster)
 
     df = pd.DataFrame(data)
 
     df.columns = [col.replace(' ', '_').lower() for col in df.columns]
     return df
-
-print( ingest_data())
